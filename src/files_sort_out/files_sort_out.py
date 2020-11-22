@@ -16,7 +16,7 @@ def cli() -> None:
       $ files_sort_out collect
 
     To show collected image folders:
-f
+
       $ files_sort_out list
 
     To remove(exclude) directories from list run:
