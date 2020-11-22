@@ -7,6 +7,7 @@ import click
 
 db_filename = "files_sort_out.db"
 
+
 @click.group()
 def cli() -> None:
     """File Sort a tool to organize images on a path.
@@ -17,7 +18,7 @@ def cli() -> None:
 
     To show collected image folders:
 
-      $ files_sort_out list
+      $ files_sort_out show
 
     To remove(exclude) directories from list run:
 
