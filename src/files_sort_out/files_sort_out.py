@@ -101,5 +101,29 @@ def copy(dest: str) -> None:
     click.echo(f"Copied {n+1}directories. Time:{elapsed_time:.2f}s.")
 
 
+@cli.command()
+def list() -> None:
+    pass
+
+
+@cli.command()
+def show() -> None:
+    pass
+
+
+@cli.command()
+def exclude() -> None:
+    pass
+
+
+@cli.command()
+def move() -> None:
+    pass
+
+
+@cli.command()
+def duplicates() -> None:
+    pass
+
 if __name__ == "__main__":
     cli()
