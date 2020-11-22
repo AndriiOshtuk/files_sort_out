@@ -9,15 +9,45 @@ db_filename = "files_sort_out.db"
 
 @click.group()
 def cli() -> None:
-    """File Sort a tool to organize images on a path."""
+    """File Sort a tool to organize images on a path.
+
+    To get started, run collect:
+
+      $ files_sort_out collect
+
+    To show collected image folders:
+f
+      $ files_sort_out list
+
+    To remove(exclude) directories from list run:
+
+      $ files_sort_out exclude <path>
+
+    Then copy files to a new location:
+
+      $ files_sort_out copy <path>
+
+    Or move files to a new location:
+
+      $ files_sort_out move <path>
+
+    To find files duplicates run:
+
+      $ files_sort_out duplicate <path>
+    """
     pass
 
 
 @cli.command()
-@click.argument("where", default=False, type=click.STRING)
-def collect(where: str) -> None:
+@click.argument(
+    "root",
+    default=False,
+    type=click.Path(resolve_path=True),
+    # help="Root path to scan",
+)
+def collect(root: str) -> None:
     """List folders where images make up 80% of files"""
-    path = Path(where)
+    path = Path(root)
     image_dirs = []
 
     start_time = time.time()
