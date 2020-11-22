@@ -66,10 +66,10 @@ def collect(root: str, print: bool) -> None:
 
                 for f in d.glob("*"):
                     if f.is_file():
-                        total_files = total_files + 1
+                        total_files += 1
 
-                        if f.suffix in ('.jpeg', '.jpg', '.bmp', '.png', '.gif', '.tiff'):
-                            image_files = image_files + 1
+                        if f.suffix in (".jpeg", ".jpg", ".bmp", ".png", ".gif", ".tiff"):
+                            image_files += 1
 
                 if total_files and image_files/total_files >= 0.8:
                     image_dirs.append(d)
@@ -78,7 +78,8 @@ def collect(root: str, print: bool) -> None:
     click.echo(f"Found {len(image_dirs)} directories in {elapsed_time:.2f}s:")
 
     with shelve.open(db_filename) as db:
-        db['image_dirs'] = image_dirs
+        db["image_dirs"] = image_dirs
+        db["root_dir"] = path
 
     if print:
         for d in image_dirs:
