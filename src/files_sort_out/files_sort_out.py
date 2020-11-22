@@ -40,32 +40,39 @@ def cli() -> None:
 
 
 @cli.command()
-@click.argument(
-    "root",
-    default=False,
-    type=click.Path(resolve_path=True),
-    # help="Root path to scan",
+@click.argument("root", type=click.Path(resolve_path=True),)
+@click.option(
+    "-p/-n",
+    "--print/--no-print",
+    default=True,
+    help="Print all collected folders",
+    show_default=True,
 )
-def collect(root: str) -> None:
-    """List folders where images make up 80% of files"""
+def collect(root: str, print: bool) -> None:
+    """Collect folders where images make up 80% of files.
+
+    ROOT is directory to search in
+    """
     path = Path(root)
     image_dirs = []
 
     start_time = time.time()
-    for d in path.glob("**"):
-        if d.is_dir():
-            total_files = 0
-            image_files = 0
 
-            for f in d.glob("*"):
-                if f.is_file():
-                    total_files = total_files + 1
+    with click.progressbar(path.glob("**"), label="Searching:") as bar:
+        for d in bar:
+            if d.is_dir():
+                total_files = 0
+                image_files = 0
 
-                    if f.suffix in ('.jpeg', '.jpg', '.bmp', '.png', '.gif', '.tiff'):
-                        image_files = image_files + 1
+                for f in d.glob("*"):
+                    if f.is_file():
+                        total_files = total_files + 1
 
-            if total_files and image_files/total_files >= 0.8:
-                image_dirs.append(d)
+                        if f.suffix in ('.jpeg', '.jpg', '.bmp', '.png', '.gif', '.tiff'):
+                            image_files = image_files + 1
+
+                if total_files and image_files/total_files >= 0.8:
+                    image_dirs.append(d)
 
     elapsed_time = time.time() - start_time
     click.echo(f"Found {len(image_dirs)} directories in {elapsed_time:.2f}s:")
@@ -73,8 +80,9 @@ def collect(root: str) -> None:
     with shelve.open(db_filename) as db:
         db['image_dirs'] = image_dirs
 
-    for d in image_dirs:
-        click.echo(str(d))
+    if print:
+        for d in image_dirs:
+            click.echo(str(d))
 
 
 @cli.command()
